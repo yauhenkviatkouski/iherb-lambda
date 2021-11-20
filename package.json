@@ -11,7 +11,8 @@
   "license": "MIT",
   "scripts": {
     "style": "prettier --config ./.prettierrc ./src/*.ts",
-    "start": "tsc && node dist/index.js"
+    "start": "tsc && node dist/index.js",
+    "archive": "tsc && cp package.json dist/ && tar -cvf archive.tar.gz dist/"
   },
   "private": false,
   "devDependencies": {
