@@ -55,7 +55,12 @@ export class IherbService {
       return Promise.all(
         productsConcise.map(async (product) => {
           const productPage = await this.getHtmlPage(product.link);
-          if (!productPage) {
+          if (
+            !productPage ||
+            productPage.rawHtml.includes(
+              "Этот продукт снят с продажи iHerb или производителем. Вы можете подобрать что-либо из перечня похожих товаров"
+            )
+          ) {
             return {
               ...product,
               isNotAvailable: true,
@@ -108,6 +113,14 @@ export class IherbService {
       virtualConsole: new VirtualConsole(),
     });
     const document = dom.window.document;
+
+    const isDiscontinued = document.querySelector(
+      ".discontinued-recommendation"
+    );
+
+    if (isDiscontinued) {
+      return null;
+    }
 
     const brand =
       document.querySelector("#breadCrumbs").childNodes[3].textContent;
